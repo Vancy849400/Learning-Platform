@@ -13,7 +13,7 @@
     <div id="toast" class="toast" role="alert" aria-live="polite"></div>
 
     <!-- HERO SECTION -->
-    <div class="hero">
+    <div class="hero" id="hero">
       <div class="hero-glow"></div>
       <h1>31-Day <span>Exam Mastery</span> Plan</h1>
       <p>Kopaline University &nbsp;·&nbsp; BSc Accounting &amp; Finance &nbsp;·&nbsp; 6 Core Courses</p>
@@ -153,6 +153,58 @@
       <!-- Phase Banner -->
       <div class="phase-banner" id="phaseBanner"></div>
     </div>
+
+    <!-- QUICK NAV OVERLAY -->
+    <div class="qnav-overlay" id="qnavOverlay" onclick="closeQuickNav()"></div>
+
+    <!-- QUICK NAV DRAWER -->
+    <div class="qnav-drawer" id="qnavDrawer">
+      <div class="qnav-header">
+        <span class="qnav-title">⚡ Quick Navigate</span>
+        <button class="qnav-close" onclick="closeQuickNav()">✕</button>
+      </div>
+      <div class="qnav-section">
+        <div class="qnav-section-label">Sections</div>
+        <button class="qnav-link" onclick="qnavScrollTo('overviewCard')">
+          <span class="qnav-icon">📊</span> Overall Progress
+        </button>
+        <button class="qnav-link" onclick="qnavScrollTo('courseTabs')">
+          <span class="qnav-icon">📚</span> Course Tabs
+        </button>
+        <button class="qnav-link" onclick="qnavScrollTo('courseContent')">
+          <span class="qnav-icon">📖</span> Course Content
+        </button>
+        <button class="qnav-link" onclick="qnavScrollTo('phaseTabs')">
+          <span class="qnav-icon">🗓</span> Study Phases
+        </button>
+        <button class="qnav-link" onclick="qnavScrollTo('phaseBanner')">
+          <span class="qnav-icon">📅</span> Phase Schedule
+        </button>
+      </div>
+      <div class="qnav-section" id="qnavCourses">
+        <div class="qnav-section-label">Jump to Course</div>
+        <!-- populated by JS -->
+      </div>
+      <div class="qnav-section" id="qnavPhases">
+        <div class="qnav-section-label">Jump to Phase</div>
+        <!-- populated by JS -->
+      </div>
+      <div class="qnav-footer">
+        <button class="qnav-link" onclick="qnavScrollTo('hero')">
+          <span class="qnav-icon">🔝</span> Back to Top
+        </button>
+      </div>
+    </div>
+
+    <!-- FLOATING QUICK NAV BUTTON -->
+    <button class="qnav-fab" id="qnavFab" onclick="openQuickNav()" title="Quick Navigate">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+        <line x1="3" y1="6" x2="21" y2="6"/>
+        <line x1="3" y1="12" x2="16" y2="12"/>
+        <line x1="3" y1="18" x2="12" y2="18"/>
+      </svg>
+      <span>Navigate</span>
+    </button>
 
     <script src="data.js"></script>
     <script src="script_new.js"></script>

@@ -649,3 +649,83 @@ if (document.readyState === "loading") {
 } else {
   init();
 }
+
+// ─────────────────────────────────────────────────────────────────────────────
+//  QUICK NAV
+// ─────────────────────────────────────────────────────────────────────────────
+function openQuickNav() {
+  document.getElementById("qnavDrawer").classList.add("open");
+  document.getElementById("qnavOverlay").classList.add("visible");
+  populateQnavCourses();
+  populateQnavPhases();
+}
+
+function closeQuickNav() {
+  document.getElementById("qnavDrawer").classList.remove("open");
+  document.getElementById("qnavOverlay").classList.remove("visible");
+}
+
+function qnavScrollTo(id) {
+  closeQuickNav();
+  setTimeout(() => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    const top = el.getBoundingClientRect().top + window.pageYOffset - 12;
+    window.scrollTo({ top: Math.max(0, top), behavior: "smooth" });
+  }, 200);
+}
+
+function populateQnavCourses() {
+  const container = document.getElementById("qnavCourses");
+  const inner = courses.map(c => {
+    const isActive = c.code === activeCourse;
+    return `<button class="qnav-link${isActive ? " active" : ""}"
+      onclick="qnavGoToCourse('${c.code}')">
+      <span class="qnav-icon">${content[c.code].emoji}</span>
+      <span>${c.code}: ${c.name}</span>
+      <span class="qnav-course-dot" style="background:${c.color}"></span>
+    </button>`;
+  }).join("");
+  container.innerHTML = `<div class="qnav-section-label">Jump to Course</div>${inner}`;
+}
+
+function populateQnavPhases() {
+  const container = document.getElementById("qnavPhases");
+  const inner = phases.map((p, i) => {
+    const isActive = i === activePhase;
+    return `<button class="qnav-link${isActive ? " active" : ""}"
+      onclick="qnavGoToPhase(${i})">
+      <span class="qnav-icon">📌</span>
+      <span>${p.name}</span>
+      <span style="font-size:11px;color:var(--dim);margin-left:auto;flex-shrink:0">${p.days}</span>
+    </button>`;
+  }).join("");
+  container.innerHTML = `<div class="qnav-section-label">Jump to Phase</div>${inner}`;
+}
+
+function qnavGoToCourse(code) {
+  setCourse(code);
+  closeQuickNav();
+  setTimeout(() => {
+    const el = document.getElementById("courseTabs");
+    if (!el) return;
+    const top = el.getBoundingClientRect().top + window.pageYOffset - 12;
+    window.scrollTo({ top: Math.max(0, top), behavior: "smooth" });
+  }, 200);
+}
+
+function qnavGoToPhase(i) {
+  setPhase(i);
+  closeQuickNav();
+  setTimeout(() => {
+    const el = document.getElementById("phaseTabs");
+    if (!el) return;
+    const top = el.getBoundingClientRect().top + window.pageYOffset - 12;
+    window.scrollTo({ top: Math.max(0, top), behavior: "smooth" });
+  }, 200);
+}
+
+// Close drawer on Escape
+document.addEventListener("keydown", e => {
+  if (e.key === "Escape") closeQuickNav();
+});
