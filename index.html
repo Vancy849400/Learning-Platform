@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>31-Day Exam Mastery Plan — Kopaline University</title>
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,400&display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href="styles_new.css"/>
+  </head>
+  <body>
+
+    <!-- TOAST NOTIFICATION -->
+    <div id="toast" class="toast" role="alert" aria-live="polite"></div>
+
+    <!-- HERO SECTION -->
+    <div class="hero">
+      <div class="hero-glow"></div>
+      <h1>31-Day <span>Exam Mastery</span> Plan</h1>
+      <p>Kopaline University &nbsp;·&nbsp; BSc Accounting &amp; Finance &nbsp;·&nbsp; 6 Core Courses</p>
+    </div>
+
+    <!-- STATS CARDS -->
+    <div class="stats">
+      <div class="stat-card"><span class="num">31</span><span class="lbl">Days</span></div>
+      <div class="stat-card"><span class="num">6</span><span class="lbl">Courses</span></div>
+      <div class="stat-card"><span class="num">120</span><span class="lbl">Study Hrs</span></div>
+      <div class="stat-card"><span class="num">5</span><span class="lbl">Phases</span></div>
+    </div>
+
+    <!-- TOP TOOLBAR -->
+    <div class="toolbar">
+      <div class="toolbar-left">
+        <button class="tool-btn" id="searchToggleBtn" onclick="toggleSearch()" title="Search (Ctrl+K)">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+          Search
+        </button>
+        <button class="tool-btn" id="timerBtn" onclick="toggleTimer()" title="Study Timer">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><polyline points="12,6 12,12 16,14"/></svg>
+          Timer
+        </button>
+        <button class="tool-btn" onclick="toggleChecklist()" title="Day Checklist">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="9,11 12,14 22,4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+          Checklist
+        </button>
+      </div>
+      <div class="toolbar-right">
+        <button class="tool-btn" onclick="exportProgress()" title="Export progress">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7,10 12,15 17,10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Export
+        </button>
+        <button class="tool-btn danger" onclick="resetProgress()" title="Reset all progress">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="1,4 1,10 7,10"/><path d="M3.51 15a9 9 0 1 0 .49-3.36"/></svg>
+          Reset
+        </button>
+      </div>
+    </div>
+
+    <!-- SEARCH PANEL -->
+    <div class="search-panel" id="searchPanel" style="display:none">
+      <div class="search-inner">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        <input type="text" id="searchInput" class="search-input" placeholder="Search concepts, terms, Q&As across all courses…" oninput="doSearch(this.value)" autocomplete="off"/>
+        <kbd>Esc</kbd>
+      </div>
+      <div id="searchResults" class="search-results"></div>
+    </div>
+
+    <!-- STUDY TIMER PANEL -->
+    <div class="timer-panel" id="timerPanel" style="display:none">
+      <div class="timer-header">
+        <span class="timer-title">⏱ Pomodoro Timer</span>
+        <button class="timer-close" onclick="toggleTimer()">✕</button>
+      </div>
+      <div class="timer-display" id="timerDisplay">25:00</div>
+      <div class="timer-mode-tabs">
+        <button class="tmode active" data-mins="25" onclick="setTimerMode(this, 25)">Focus 25</button>
+        <button class="tmode" data-mins="5" onclick="setTimerMode(this, 5)">Break 5</button>
+        <button class="tmode" data-mins="15" onclick="setTimerMode(this, 15)">Break 15</button>
+      </div>
+      <div class="timer-controls">
+        <button class="tctrl" id="timerStart" onclick="startPause()">▶ Start</button>
+        <button class="tctrl secondary" onclick="resetTimerClock()">↺ Reset</button>
+      </div>
+      <div class="timer-sessions">
+        <span id="sessionCount">🍅 0 sessions today</span>
+      </div>
+    </div>
+
+    <!-- DAY CHECKLIST PANEL -->
+    <div class="checklist-panel" id="checklistPanel" style="display:none">
+      <div class="checklist-header">
+        <span>📋 Today's Plan</span>
+        <div class="checklist-hright">
+          <span id="checklistProgress">0 / 0</span>
+          <button class="timer-close" onclick="toggleChecklist()">✕</button>
+        </div>
+      </div>
+      <div class="checklist-day-select">
+        <label>Select Day</label>
+        <select id="daySelect" onchange="renderChecklist()">
+          <!-- populated by JS -->
+        </select>
+      </div>
+      <div id="checklistItems"></div>
+    </div>
+
+    <!-- MAIN CONTAINER -->
+    <div class="container">
+
+      <!-- OVERALL PROGRESS OVERVIEW -->
+      <div class="overview-card" id="overviewCard">
+        <div class="ov-header">
+          <span class="ov-title">📊 Your Overall Progress</span>
+          <button class="ov-toggle" onclick="toggleOverview()">Hide</button>
+        </div>
+        <div id="overviewBody">
+          <div class="ov-course-grid" id="overviewGrid"></div>
+          <div class="ov-phase-bar">
+            <div class="ov-bar-label">
+              <span>Total Q&As answered</span>
+              <span id="totalQAScore">0 / 0</span>
+            </div>
+            <div class="progress-track">
+              <div class="progress-fill" id="totalQABar" style="width:0%"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Course Tabs -->
+      <div class="course-scroller" id="courseTabs"></div>
+
+      <!-- Confidence Rating (per course) -->
+      <div class="confidence-row" id="confidenceRow"></div>
+
+      <!-- Main Course Content -->
+      <div id="courseContent"></div>
+
+      <!-- Phase Tabs -->
+      <div class="phase-scroller" id="phaseTabs"></div>
+
+      <!-- Progress Bar -->
+      <div class="progress-wrap">
+        <div class="progress-label">
+          <span id="progressLabel">Phase progress</span>
+          <span id="progressPct">20%</span>
+        </div>
+        <div class="progress-track">
+          <div class="progress-fill" id="progressBar" style="width:20%"></div>
+        </div>
+      </div>
+
+      <!-- Phase Banner -->
+      <div class="phase-banner" id="phaseBanner"></div>
+    </div>
+
+    <script src="data.js"></script>
+    <script src="script_new.js"></script>
+  </body>
+</html>
